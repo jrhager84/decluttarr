@@ -127,6 +127,16 @@ async def main():
         await wait_next_run()
 
 
+async def main_with_restart():
+    """Run the daemon loop with automatic restart on unexpected failures."""
+    while True:
+        try:
+            await main()
+        except Exception as err:  # noqa: BLE001
+            logger.error(f"Main loop crashed: {err}. Restarting in 30 seconds...")
+            await asyncio.sleep(30)
+
+
 async def start():
     """Entry point that optionally runs web server alongside main loop."""
     if web_enabled:
@@ -135,7 +145,7 @@ async def start():
         web_task = asyncio.create_task(
             start_web_server(settings, event_bus, trigger_event)
         )
-        main_task = asyncio.create_task(main())
+        main_task = asyncio.create_task(main_with_restart())
         await asyncio.gather(main_task, web_task)
     else:
         await main()
