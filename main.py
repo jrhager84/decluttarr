@@ -132,6 +132,14 @@ async def main_with_restart():
     while True:
         try:
             await main()
+        except SystemExit as err:
+            if err.code == 0:
+                raise
+            logger.error(
+                "Main loop exited due to a startup failure. "
+                "Restarting in 30 seconds..."
+            )
+            await asyncio.sleep(30)
         except Exception as err:  # noqa: BLE001
             logger.error(f"Main loop crashed: {err}. Restarting in 30 seconds...")
             await asyncio.sleep(30)
