@@ -48,7 +48,7 @@ async def start_web_server(settings, event_bus: EventBus, trigger_event: asyncio
     host = settings.web.host
     port = settings.web.port
     proxy_prefix = getattr(settings.web, "proxy_prefix", None)
-    root_path = f"/{proxy_prefix}/{port}" if proxy_prefix else None
+    root_path = f"/{proxy_prefix}/{port}" if proxy_prefix else ""
 
     # Create app
     app = create_app(settings, event_bus, trigger_event)
@@ -102,7 +102,7 @@ async def start_web_server(settings, event_bus: EventBus, trigger_event: asyncio
 
     logger.info(f"Web UI starting on http://{host}:{port}")
     if proxy_prefix:
-       logger.debug(f"Web UI root path:{root_path}") 
+        logger.debug(f"Web UI root path: {root_path}")
 
     config = uvicorn.Config(
         app,
