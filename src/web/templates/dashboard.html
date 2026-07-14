@@ -18,7 +18,13 @@
                     <p>{{ inst.arr_type | capitalize }}</p>
                 </hgroup>
             </header>
-            <p><small>{{ inst.base_url }}</small></p>
+            <p>
+                <small>
+                    <a href="{{ inst.base_url }}" target="_blank" rel="noopener noreferrer">
+                        {{ inst.base_url }}
+                    </a>
+                </small>
+            </p>
         </article>
         {% endfor %}
     </div>
